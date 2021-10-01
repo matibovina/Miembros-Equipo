@@ -65,7 +65,7 @@ public class Altas extends JFrame {
 	private JDialog dialog;
 	JButton btnGuardar;
 	DefaultTableModel model;
-	private TableRowSorter<TableModel> sorter = null;
+//	private TableRowSorter<TableModel> sorter = null;
 
 	/**
 	 * Create the frame.
@@ -129,7 +129,7 @@ public class Altas extends JFrame {
 		lblFiltroCargo.setBounds(13, 48, 105, 14);
 		panel.add(lblFiltroCargo);
 
-		filtroCargo = new JComboBox(); // Combobox que sirve para filtrar en la tabla (pero busca en base de datos la
+		filtroCargo = new JComboBox<String>(); // Combobox que sirve para filtrar en la tabla (pero busca en base de datos la
 										// informacion)
 		filtroCargo.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
@@ -142,7 +142,7 @@ public class Altas extends JFrame {
 				}
 			}
 		});
-		filtroCargo.setModel(new DefaultComboBoxModel(new String[] { "Seleccionar", "Junior", "Senior", "Analista" }));
+		filtroCargo.setModel(new DefaultComboBoxModel<String>(new String[] { "Seleccionar", "Junior", "Senior", "Analista" }));
 		filtroCargo.setSelectedIndex(0);
 		filtroCargo.setBounds(128, 44, 102, 22);
 		panel.add(filtroCargo);
@@ -170,13 +170,13 @@ public class Altas extends JFrame {
 		lblCargo.setBounds(421, 11, 41, 14);
 		panel.add(lblCargo);
 
-		cargos = new JComboBox();
+		cargos = new JComboBox<String>();
 		cargos.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				cargo = (String) cargos.getSelectedItem().toString();
 			}
 		});
-		cargos.setModel(new DefaultComboBoxModel(new String[] { "Seleccionar", "Junior", "Senior", "Analista" }));
+		cargos.setModel(new DefaultComboBoxModel<String>(new String[] { "Seleccionar", "Junior", "Senior", "Analista" }));
 		cargos.setSelectedIndex(0);
 		cargos.setBounds(475, 7, 102, 22);
 		panel.add(cargos);
@@ -300,7 +300,11 @@ public class Altas extends JFrame {
 		table.setModel(
 				new DefaultTableModel(new Object[][] {}, new String[] { "ID", "Nombre y Apellidos", "Edad", "Cargo" }) {
 					Class[] columnTypes = new Class[] { Integer.class, String.class, Integer.class, String.class };
-
+				    @Override
+				    public boolean isCellEditable(int row, int column) {
+				       //all cells false
+				       return false;
+				    }
 					public Class getColumnClass(int columnIndex) {
 						return columnTypes[columnIndex];
 					}
@@ -321,25 +325,13 @@ public class Altas extends JFrame {
 
 		if (!filtroCargo.getSelectedItem().toString().equals("Seleccionar")) { // Si esta seleccionada alguna opcion del
 																				// combobox muestra eso
-				
-	
-			
-					try {
-						//listaMiembros = DAOMiembro.getInstance().buscarPorCargo(filtroCargo.getSelectedItem().toString());
-						listaMiembros = miembro.buscarMiembros(filtroCargo.getSelectedItem().toString());
-					} catch (SQLException e) {
-						// TODO Auto-generated catch block
-						
-					}
-				//	System.out.println(listaMiembros.size());
-					if(listaMiembros.isEmpty()) {
-						JOptionPane.showMessageDialog(null, "No existen miembros con ese cargo");
-						filtroCargo.setSelectedItem("Seleccionar");
-					}
 
+			listaMiembros = miembro.buscarMiembros(filtroCargo.getSelectedItem().toString());
 
-
-
+			if (listaMiembros.isEmpty()) {
+				JOptionPane.showMessageDialog(null, "No existen miembros con ese cargo");
+				filtroCargo.setSelectedItem("Seleccionar");
+			}
 
 		} else {
 			listaMiembros = miembro.obtenerLista(); // Sino muestra todos los miembros.
