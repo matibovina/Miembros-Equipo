@@ -102,19 +102,28 @@ public class DAOMiembro {
 
 		ArrayList<Miembro> listaCargoMiembros = null;
 
-		while (result.next()) {
+					
+						while (result.next()) {
 
-			if (listaCargoMiembros == null) {
-				listaCargoMiembros = new ArrayList<Miembro>();
+							if (listaCargoMiembros == null) {
+								listaCargoMiembros = new ArrayList<Miembro>();
 
-			}
-			listaCargoMiembros.add(new Miembro(result.getInt("id"), result.getString("nombre"), result.getInt("edad"),
-					result.getString("cargo")));
+							}
+							listaCargoMiembros.add(new Miembro(result.getInt("id"), result.getString("nombre"), result.getInt("edad"),
+									result.getString("cargo")));
 
-		}
+						}		
+						
+					 if(listaCargoMiembros == null) {
+						listaCargoMiembros = new ArrayList<Miembro>();
+					}
+				
+
+
 
 		result.close();
 		ps.close();
+	
 		return listaCargoMiembros;
 	}
 

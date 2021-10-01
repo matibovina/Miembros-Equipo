@@ -321,15 +321,28 @@ public class Altas extends JFrame {
 
 		if (!filtroCargo.getSelectedItem().toString().equals("Seleccionar")) { // Si esta seleccionada alguna opcion del
 																				// combobox muestra eso
-			if (listaMiembros.size() != 0) {
-				listaMiembros = DAOMiembro.getInstance().buscarPorCargo(filtroCargo.getSelectedItem().toString());
-			} else {
-				JOptionPane.showMessageDialog(null, "No existen miembros con ese cargo");
-				filtroCargo.setSelectedItem("Seleccionar");
-			}
+				
+	
+			
+					try {
+						//listaMiembros = DAOMiembro.getInstance().buscarPorCargo(filtroCargo.getSelectedItem().toString());
+						listaMiembros = miembro.buscarMiembros(filtroCargo.getSelectedItem().toString());
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						
+					}
+				//	System.out.println(listaMiembros.size());
+					if(listaMiembros.isEmpty()) {
+						JOptionPane.showMessageDialog(null, "No existen miembros con ese cargo");
+						filtroCargo.setSelectedItem("Seleccionar");
+					}
+
+
+
+
 
 		} else {
-			listaMiembros = DAOMiembro.getInstance().obtenerLista_DAO(); // Sino muestra todos los miembros.
+			listaMiembros = miembro.obtenerLista(); // Sino muestra todos los miembros.
 		}
 
 		for (Miembro m : listaMiembros) {

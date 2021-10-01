@@ -81,8 +81,8 @@ public class Miembro {
 		return promedio;
 	}
 
-	public void buscarMiembros(String cargo) throws SQLException {
-		DAOMiembro.getInstance().buscarPorCargo(cargo);
+	public ArrayList<Miembro> buscarMiembros(String cargo) throws SQLException {
+		return DAOMiembro.getInstance().buscarPorCargo(cargo);
 	}
 
 }
