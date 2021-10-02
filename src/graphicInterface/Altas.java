@@ -35,6 +35,8 @@ import java.awt.event.MouseEvent;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ActionListener;
@@ -65,6 +67,10 @@ public class Altas extends JFrame {
 	private JDialog dialog;
 	JButton btnGuardar;
 	DefaultTableModel model;
+	String regex = "^[a-zA-Z ]+$";
+	Pattern patron = Pattern.compile(regex);
+	String regexNum = "\\b\\d+\\b";
+	Pattern patronNum = Pattern.compile(regexNum);
 //	private TableRowSorter<TableModel> sorter = null;
 
 	/**
@@ -129,8 +135,9 @@ public class Altas extends JFrame {
 		lblFiltroCargo.setBounds(13, 48, 105, 14);
 		panel.add(lblFiltroCargo);
 
-		filtroCargo = new JComboBox<String>(); // Combobox que sirve para filtrar en la tabla (pero busca en base de datos la
-										// informacion)
+		filtroCargo = new JComboBox<String>(); // Combobox que sirve para filtrar en la tabla (pero busca en base de
+												// datos la
+		// informacion)
 		filtroCargo.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
 
@@ -142,7 +149,8 @@ public class Altas extends JFrame {
 				}
 			}
 		});
-		filtroCargo.setModel(new DefaultComboBoxModel<String>(new String[] { "Seleccionar", "Junior", "Senior", "Analista" }));
+		filtroCargo.setModel(
+				new DefaultComboBoxModel<String>(new String[] { "Seleccionar", "Junior", "Senior", "Analista" }));
 		filtroCargo.setSelectedIndex(0);
 		filtroCargo.setBounds(128, 44, 102, 22);
 		panel.add(filtroCargo);
@@ -176,7 +184,8 @@ public class Altas extends JFrame {
 				cargo = (String) cargos.getSelectedItem().toString();
 			}
 		});
-		cargos.setModel(new DefaultComboBoxModel<String>(new String[] { "Seleccionar", "Junior", "Senior", "Analista" }));
+		cargos.setModel(
+				new DefaultComboBoxModel<String>(new String[] { "Seleccionar", "Junior", "Senior", "Analista" }));
 		cargos.setSelectedIndex(0);
 		cargos.setBounds(475, 7, 102, 22);
 		panel.add(cargos);
@@ -211,22 +220,31 @@ public class Altas extends JFrame {
 		btnGuardar.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
-				try {
-					guardarNuevo();
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+				int response = JOptionPane.showConfirmDialog(btnGuardar, "Guardar miembro nuevo?", "Confirmar",
+						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+				if (response == JOptionPane.YES_OPTION) {
+					try {
+						guardarNuevo();
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 				}
+
 			}
 
 		});
 		btnGuardar.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
-				try {
-					guardarNuevo();
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+				int response = JOptionPane.showConfirmDialog(btnGuardar, "Guardar miembro nuevo?", "Confirmar",
+						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+				if (response == JOptionPane.YES_OPTION) {
+					try {
+						guardarNuevo();
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 				}
 			}
 		});
@@ -237,22 +255,32 @@ public class Altas extends JFrame {
 		btnActualizar.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
-				try {
-					actualizar();
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+				int response = JOptionPane.showConfirmDialog(btnGuardar, "Actualizar miembro?", "Confirmar",
+						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+				if (response == JOptionPane.YES_OPTION) {
+					try {
+						actualizar();
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+
 				}
 			}
 		});
 		btnActualizar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				try {
-					actualizar();
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+				int response = JOptionPane.showConfirmDialog(btnGuardar, "Actualizar miembro?", "Confirmar",
+						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+				if (response == JOptionPane.YES_OPTION) {
+					try {
+						actualizar();
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+
 				}
 			}
 		});
@@ -300,11 +328,13 @@ public class Altas extends JFrame {
 		table.setModel(
 				new DefaultTableModel(new Object[][] {}, new String[] { "ID", "Nombre y Apellidos", "Edad", "Cargo" }) {
 					Class[] columnTypes = new Class[] { Integer.class, String.class, Integer.class, String.class };
-				    @Override
-				    public boolean isCellEditable(int row, int column) {
-				       //all cells false
-				       return false;
-				    }
+
+					@Override
+					public boolean isCellEditable(int row, int column) {
+						// all cells false
+						return false;
+					}
+
 					public Class getColumnClass(int columnIndex) {
 						return columnTypes[columnIndex];
 					}
@@ -371,36 +401,37 @@ public class Altas extends JFrame {
 	}
 
 	public void guardarNuevo() throws SQLException { // Guarda nuevo miembro, si ya existe muestra mensaje.
+
+		Matcher match = patron.matcher(textField_nombre.getText());
+		Matcher matchNum = patronNum.matcher(textField_edad.getText());
 		if (textField_nombre.getText().length() == 0 || textField_edad.getText().length() == 0
 				|| cargos.getSelectedItem() == "Seleccionar") {
 			JOptionPane.showMessageDialog(null, "DEBE COMPLETAR TODOS LOS CAMPOS");
+		} else if (!match.find()) {
+			JOptionPane.showMessageDialog(null, "El nombre no puede llevar numeros o simbolos.");
+		} else if (!matchNum.find()) {
+			JOptionPane.showMessageDialog(null, "La edad debe ser un numero.");
 		} else {
 			miembro.setNombre(textField_nombre.getText());
+			miembro.setEdad(Integer.parseInt(textField_edad.getText()));
+			miembro.setCargo(cargos.getSelectedItem().toString());
+
 			try {
-				miembro.setEdad(Integer.parseInt(textField_edad.getText()));
-			} catch (NumberFormatException e) {
-				JOptionPane.showMessageDialog(null, "El valor debe ser un numero");
+				if (miembro.getID() == 0) {
+					miembro.insert();
+					limpiarCampos();
+				} else if (miembro.getID() != 0) {
+					JOptionPane.showMessageDialog(null, "El usuario ya existe, puede actualizarlo.");
+				}
+			} catch (HeadlessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			miembro.setCargo(cargos.getSelectedItem().toString());
 		}
 
-		try {
-			if (miembro.getID() == 0 && miembro.getNombre().length() != 0
-					&& !Integer.toString(miembro.getEdad()).equals("0") && miembro.getCargo() != "Seleccionar") {
-
-				miembro.insert();
-				limpiarCampos();
-			} else if (miembro.getID() != 0) {
-				JOptionPane.showMessageDialog(null, "El usuario ya existe, puede actualizarlo.");
-			}
-		} catch (HeadlessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		pintarTabla();
 		cantidadMiembros();
 		promedioEdad();
@@ -408,31 +439,36 @@ public class Altas extends JFrame {
 	}
 
 	public void actualizar() throws SQLException { // Actualiza miembros ya existentes. Si no existe muestra mensaje.
+		Matcher match = patron.matcher(textField_nombre.getText());
+		Matcher matchNum = patronNum.matcher(textField_edad.getText());
 		if (textField_nombre.getText().length() == 0 || textField_edad.getText().length() == 0
 				|| cargos.getSelectedItem() == "Seleccionar") {
 			JOptionPane.showMessageDialog(null, "DEBE COMPLETAR TODOS LOS CAMPOS");
+		} else if (!match.find()) {
+			JOptionPane.showMessageDialog(null, "El nombre no puede llevar numeros o simbolos.");
+		} else if (!matchNum.find()) {
+			JOptionPane.showMessageDialog(null, "La edad debe ser un numero.");
 		} else {
 			miembro.setNombre(textField_nombre.getText());
 			miembro.setEdad(Integer.parseInt(textField_edad.getText()));
 			miembro.setCargo(cargos.getSelectedItem().toString());
-		}
 
-		try {
-			if (miembro.getID() != 0 && miembro.getNombre().length() != 0
-					&& !Integer.toString(miembro.getEdad()).equals("0") && miembro.getCargo() != "Seleccionar") {
-				miembro.update();
-				limpiarCampos();
-			} else {
-				JOptionPane.showMessageDialog(null, "El usuario no existe, debe guardarlo como Nuevo Miembro.");
+			try {
+				if (miembro.getID() != 0) {
+					miembro.update();
+					limpiarCampos();
+				} else {
+					JOptionPane.showMessageDialog(null, "El usuario no existe, debe guardarlo como Nuevo Miembro.");
+				}
+			} catch (HeadlessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-		} catch (HeadlessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 
+		}
 		pintarTabla();
 		cantidadMiembros();
 		promedioEdad();
