@@ -72,6 +72,7 @@ public class DAOMiembro {
 			listaMiembros.add(new Miembro(result.getInt("id"), result.getString("nombre"), result.getInt("edad"),
 					result.getString("cargo")));
 		}
+
 		result.close();
 		ps.close();
 
@@ -89,6 +90,8 @@ public class DAOMiembro {
 		if (result.next()) {
 			m1 = new Miembro(result.getInt("id"), result.getString("nombre"), result.getInt("edad"),
 					result.getString("cargo"));
+		} else {
+			m1 = new Miembro();
 		}
 		result.close();
 		ps.close();
@@ -96,34 +99,28 @@ public class DAOMiembro {
 	}
 
 	public ArrayList<Miembro> buscarPorCargo(String cargo) throws SQLException {
-		PreparedStatement ps = conn.prepareStatement("SELECT * FROM miembros_equipo.miembros WHERE cargo = ?");
+		PreparedStatement ps = conn.prepareStatement("SELECT * FROM miembros_equipo.miembros WHERE (cargo = ?)");
 		ps.setString(1, cargo);
 		ResultSet result = ps.executeQuery();
 
 		ArrayList<Miembro> listaCargoMiembros = null;
 
-					
-						while (result.next()) {
+		while (result.next()) {
+	
+			if (listaCargoMiembros == null) {
+				listaCargoMiembros = new ArrayList<Miembro>();
+			}
+			listaCargoMiembros.add(new Miembro(result.getInt("id"), result.getString("nombre"), result.getInt("edad"),
+					result.getString("cargo")));
+		}
 
-							if (listaCargoMiembros == null) {
-								listaCargoMiembros = new ArrayList<Miembro>();
-
-							}
-							listaCargoMiembros.add(new Miembro(result.getInt("id"), result.getString("nombre"), result.getInt("edad"),
-									result.getString("cargo")));
-
-						}		
-						
-					 if(listaCargoMiembros == null) {
-						listaCargoMiembros = new ArrayList<Miembro>();
-					}
-				
-
-
+		if (listaCargoMiembros == null) {
+			listaCargoMiembros = new ArrayList<Miembro>();
+		}
 
 		result.close();
 		ps.close();
-	
+
 		return listaCargoMiembros;
 	}
 

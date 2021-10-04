@@ -87,19 +87,19 @@ public class Altas extends JFrame {
 
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 612, 488);
+		setBounds(100, 100, 710, 488);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
 		JPanel panel = new JPanel(); // Panel que contiene la tabla
-		panel.setBounds(0, 17, 590, 129);
+		panel.setBounds(0, 17, 710, 129);
 		contentPane.add(panel);
 		panel.setLayout(null);
 
 		JPanel panel_1 = new JPanel(); // Panel que contiene botones, etiquetas y campos de texto.
-		panel_1.setBounds(0, 157, 592, 290);
+		panel_1.setBounds(0, 157, 710, 290);
 		contentPane.add(panel_1);
 
 		model = new DefaultTableModel();
@@ -126,56 +126,65 @@ public class Altas extends JFrame {
 		panel_1.setLayout(null);
 
 		JScrollPane scrollPane = new JScrollPane(table); // Creacion del scroll en el que va insertada la tabla.
-		scrollPane.setBounds(10, 5, 572, 274);
+		scrollPane.setBounds(59, 6, 585, 274);
 		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
 		panel_1.add(scrollPane);
+
 		JLabel lblFiltroCargo = new JLabel("Filtrar por Cargo");
 		lblFiltroCargo.setHorizontalAlignment(SwingConstants.CENTER);
-		lblFiltroCargo.setBounds(13, 48, 105, 14);
+		lblFiltroCargo.setBounds(23, 58, 105, 14);
 		panel.add(lblFiltroCargo);
 
-		filtroCargo = new JComboBox<String>(); // Combobox que sirve para filtrar en la tabla (pero busca en base de
-												// datos la
+		filtroCargo = new JComboBox<String>();
+		// datos la
 		// informacion)
 		filtroCargo.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
+				switch (e.getStateChange()) {
+				case ItemEvent.DESELECTED:
+					// Do what ever you want when the item is deselected
+					break;
+				case ItemEvent.SELECTED:
+					try {
+						pintarTabla();
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 
-				try {
-					pintarTabla();
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					break;
 				}
 			}
 		});
+
 		filtroCargo.setModel(
 				new DefaultComboBoxModel<String>(new String[] { "Seleccionar", "Junior", "Senior", "Analista" }));
 		filtroCargo.setSelectedIndex(0);
-		filtroCargo.setBounds(128, 44, 102, 22);
+		filtroCargo.setBounds(131, 54, 149, 22);
+
 		panel.add(filtroCargo);
 		this.pintarTabla();
-
 		JLabel lblNombre = new JLabel("Nombre y Apellidos");
-		lblNombre.setBounds(13, 11, 113, 14);
+		lblNombre.setBounds(23, 11, 134, 14);
 		panel.add(lblNombre);
 
 		textField_nombre = new JTextField();
-		textField_nombre.setBounds(139, 8, 171, 20);
+		textField_nombre.setBounds(159, 8, 171, 20);
 		panel.add(textField_nombre);
 		textField_nombre.setColumns(10);
 
 		JLabel lblEdad = new JLabel("Edad");
-		lblEdad.setBounds(323, 11, 41, 14);
+		lblEdad.setBounds(353, 11, 41, 14);
 		panel.add(lblEdad);
 
 		textField_edad = new JTextField();
 		textField_edad.setColumns(10);
-		textField_edad.setBounds(377, 8, 31, 20);
+		textField_edad.setBounds(399, 8, 31, 20);
 		panel.add(textField_edad);
 
 		JLabel lblCargo = new JLabel("Cargo");
-		lblCargo.setBounds(421, 11, 41, 14);
+		lblCargo.setBounds(482, 11, 41, 14);
 		panel.add(lblCargo);
 
 		cargos = new JComboBox<String>();
@@ -187,114 +196,130 @@ public class Altas extends JFrame {
 		cargos.setModel(
 				new DefaultComboBoxModel<String>(new String[] { "Seleccionar", "Junior", "Senior", "Analista" }));
 		cargos.setSelectedIndex(0);
-		cargos.setBounds(475, 7, 102, 22);
+		cargos.setBounds(535, 7, 149, 22);
 		panel.add(cargos);
 
 		JLabel lblCantidadMiembros = new JLabel("Cantidad Miembros");
 		lblCantidadMiembros.setHorizontalAlignment(SwingConstants.CENTER);
-		lblCantidadMiembros.setBounds(262, 48, 113, 14);
+		lblCantidadMiembros.setBounds(333, 58, 113, 14);
 		panel.add(lblCantidadMiembros);
 
 		lblCantidad = new JLabel();
 		lblCantidad.setForeground(Color.BLUE);
 		lblCantidad.setFont(new Font("Tahoma", Font.BOLD, 12));
 		lblCantidad.setHorizontalAlignment(SwingConstants.CENTER);
-		lblCantidad.setBounds(377, 48, 31, 14);
+		lblCantidad.setBounds(448, 58, 31, 14);
 		cantidadMiembros();
 		panel.add(lblCantidad);
 
 		JLabel lblPromedioEdades = new JLabel("Promedio Edades");
 		lblPromedioEdades.setHorizontalAlignment(SwingConstants.CENTER);
-		lblPromedioEdades.setBounds(425, 48, 102, 14);
+		lblPromedioEdades.setBounds(540, 58, 102, 14);
 		panel.add(lblPromedioEdades);
 
 		lblPromedio = new JLabel();
 		lblPromedio.setForeground(Color.BLUE);
 		lblPromedio.setFont(new Font("Tahoma", Font.BOLD, 12));
 		lblPromedio.setHorizontalAlignment(SwingConstants.CENTER);
-		lblPromedio.setBounds(526, 48, 51, 14);
+		lblPromedio.setBounds(641, 58, 51, 14);
 		promedioEdad();
 		panel.add(lblPromedio);
 
-		btnGuardar = new JButton("Guardar Nuevo");
+		btnGuardar = new JButton("Guardar Nuevo");// Se ejecuta guardar Nunevo tanto con click como con tecla enter
 		btnGuardar.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
-				int response = JOptionPane.showConfirmDialog(btnGuardar, "Guardar miembro nuevo?", "Confirmar",
-						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-				if (response == JOptionPane.YES_OPTION) {
-					try {
-						guardarNuevo();
-					} catch (SQLException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-				}
 
+				try {
+					guardarNuevo();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 
 		});
 		btnGuardar.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
-				int response = JOptionPane.showConfirmDialog(btnGuardar, "Guardar miembro nuevo?", "Confirmar",
-						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-				if (response == JOptionPane.YES_OPTION) {
-					try {
-						guardarNuevo();
-					} catch (SQLException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
+
+				try {
+					guardarNuevo();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
 				}
 			}
 		});
-		btnGuardar.setBounds(12, 94, 133, 23);
+		btnGuardar.setBounds(18, 88, 155, 35);
 		panel.add(btnGuardar);
 
-		JButton btnActualizar = new JButton("Actualizar");
+		JButton btnActualizar = new JButton("Actualizar"); // Se ejecuta actualizar tanto con click como con tecla enter
 		btnActualizar.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
-				int response = JOptionPane.showConfirmDialog(btnGuardar, "Actualizar miembro?", "Confirmar",
-						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-				if (response == JOptionPane.YES_OPTION) {
-					try {
-						actualizar();
-					} catch (SQLException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
+				if (miembro.getID() != 0 || table.getSelectedRow() >= 0) { // Pide confirmacion de cambios
+					int response = JOptionPane.showConfirmDialog(btnGuardar, "Actualizar miembro?", "Confirmar",
+							JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+					if (response == JOptionPane.YES_OPTION) {
+						try {
+							actualizar();
+						} catch (SQLException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
 
+					}
 				}
+
 			}
 		});
 		btnActualizar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				int response = JOptionPane.showConfirmDialog(btnGuardar, "Actualizar miembro?", "Confirmar",
-						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-				if (response == JOptionPane.YES_OPTION) {
-					try {
-						actualizar();
-					} catch (SQLException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
+				if (miembro.getID() != 0 || table.getSelectedRow() >= 0) {
+					int response = JOptionPane.showConfirmDialog(btnGuardar, "Actualizar miembro?", "Confirmar",
+							JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+					if (response == JOptionPane.YES_OPTION) {
+						try {
+							actualizar();
+						} catch (SQLException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
 					}
-
 				}
 			}
 		});
-		btnActualizar.setBounds(157, 94, 133, 23);
+		btnActualizar.setBounds(191, 88, 155, 35);
 		panel.add(btnActualizar);
 
-		JButton btnBorrarFila = new JButton("Borrar Fila");
+		JButton btnBorrarFila = new JButton("Borrar Fila"); // Se ejecuta accion tanto con click como con tecla enter
+		btnBorrarFila.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (miembro.getID() != 0 || table.getSelectedRow() >= 0) { // pide confirmacion de borrado.
+					int response = JOptionPane.showConfirmDialog(btnBorrarFila, "Desea borrar miembro de la lista?",
+							"Confirmar", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+					if (response == JOptionPane.YES_OPTION) {
+						borrarFila();
+					}
+				}
+			}
+
+		});
 		btnBorrarFila.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				borrarFila();
+				if (miembro.getID() != 0 || table.getSelectedRow() >= 0) {
+					int response = JOptionPane.showConfirmDialog(btnBorrarFila, "Desea borrar miembro de la lista?",
+							"Confirmar", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+					if (response == JOptionPane.YES_OPTION) {
+						borrarFila();
+					}
+				}
 			}
 		});
-		btnBorrarFila.setBounds(302, 94, 133, 23);
+		btnBorrarFila.setBounds(364, 88, 155, 35);
 		panel.add(btnBorrarFila);
 
 		JButton btnLimpiar = new JButton("Limpiar");
@@ -305,20 +330,20 @@ public class Altas extends JFrame {
 			}
 		});
 
-		btnLimpiar.setBounds(447, 94, 133, 23);
+		btnLimpiar.setBounds(537, 88, 155, 35);
 		panel.add(btnLimpiar);
 
 		JSeparator separator = new JSeparator();
-		separator.setBounds(6, 36, 576, 39);
+		separator.setBounds(6, 37, 698, 38);
 		panel.add(separator);
 
 		JSeparator separator_1 = new JSeparator();
-		separator_1.setBounds(6, 73, 576, 2);
+		separator_1.setBounds(6, 75, 698, 0);
 		panel.add(separator_1);
 
 		JSeparator separator_2 = new JSeparator();
 		separator_2.setOrientation(SwingConstants.VERTICAL);
-		separator_2.setBounds(240, 36, 12, 38);
+		separator_2.setBounds(300, 40, 12, 38);
 		panel.add(separator_2);
 
 //
@@ -340,7 +365,12 @@ public class Altas extends JFrame {
 					}
 				});
 		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+
 		centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+		table.getTableHeader().setDefaultRenderer(centerRenderer);
+
+		table.getTableHeader().setReorderingAllowed(false); // not allow re-ordering of columns
+		table.getTableHeader().setResizingAllowed(false);
 		table.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
 		table.getColumnModel().getColumn(1).setCellRenderer(centerRenderer);
 		table.getColumnModel().getColumn(2).setCellRenderer(centerRenderer);
@@ -350,21 +380,23 @@ public class Altas extends JFrame {
 		table.getColumnModel().getColumn(2).setPreferredWidth(60);
 		table.getColumnModel().getColumn(3).setPreferredWidth(156);
 
-		ArrayList<Miembro> listaMiembros = new ArrayList<Miembro>(); // Creacion de la lista que guarda miembros de
-																		// equipo.
+		// Creacion de la lista que guarda miembros de
+		// equipo.
+
+		ArrayList<Miembro> listaMiembros = new ArrayList<Miembro>();
 
 		if (!filtroCargo.getSelectedItem().toString().equals("Seleccionar")) { // Si esta seleccionada alguna opcion del
-																				// combobox muestra eso
-
-			listaMiembros = miembro.buscarMiembros(filtroCargo.getSelectedItem().toString());
+			listaMiembros = miembro.buscarMiembros(filtroCargo.getSelectedItem().toString());// combobox muestra eso
 
 			if (listaMiembros.isEmpty()) {
 				JOptionPane.showMessageDialog(null, "No existen miembros con ese cargo");
 				filtroCargo.setSelectedItem("Seleccionar");
-			}
+			} 
 
 		} else {
+
 			listaMiembros = miembro.obtenerLista(); // Sino muestra todos los miembros.
+
 		}
 
 		for (Miembro m : listaMiembros) {
@@ -502,20 +534,20 @@ public class Altas extends JFrame {
 	public void llenarCampos() throws NumberFormatException, SQLException { // Completa los campos con los datos del
 																			// miembros seleccionado.
 		DefaultTableModel tm = (DefaultTableModel) table.getModel();
-		String dato = String.valueOf(tm.getValueAt(table.getSelectedRow(), 0));
 
-		try {
+		String dato = null;
+		if (table.getSelectedRow() >= 0) {
+			dato = String.valueOf(tm.getValueAt(table.getSelectedRow(), 0));
+		}
+
+		if (dato != null) {
+
 			miembro = DAOMiembro.getInstance().traerPorId(Integer.parseInt(dato));
 
 			textField_nombre.setText(miembro.getNombre());
 			textField_edad.setText(String.valueOf(miembro.getEdad()));
 			cargos.setSelectedItem(miembro.getCargo());
-		} catch (NumberFormatException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+
 		}
 
 	}
