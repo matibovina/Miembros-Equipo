@@ -1,6 +1,8 @@
--- MySQL dump 10.13  Distrib 8.0.26, for Win64 (x86_64)
+CREATE DATABASE  IF NOT EXISTS `miembros_equipo` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+USE `miembros_equipo`;
+-- MySQL dump 10.13  Distrib 8.0.21, for macos10.15 (x86_64)
 --
--- Host: localhost    Database: miembros_equipo
+-- Host: 127.0.0.1    Database: miembros_equipo
 -- ------------------------------------------------------
 -- Server version	8.0.26
 
@@ -28,7 +30,7 @@ CREATE TABLE `miembros` (
   `edad` int NOT NULL,
   `cargo` varchar(45) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -37,7 +39,7 @@ CREATE TABLE `miembros` (
 
 LOCK TABLES `miembros` WRITE;
 /*!40000 ALTER TABLE `miembros` DISABLE KEYS */;
-INSERT INTO `miembros` VALUES (8,'Bruno Massimino',18,'Analista'),(9,'Sofia Richardson',45,'Analista'),(10,'Mariano Ahumada',32,'Junior'),(11,'Lucila Garcia Migueles',55,'Senior'),(12,'Juan Pablo Listello',18,'Junior'),(14,'Gisella Garcia Migueles',33,'Junior'),(15,'Matias Ezequiel Bovina',33,'Senior'),(16,'Matias DAlessandro',18,'Senior'),(17,'Mauricio Palamedi',39,'Analista'),(18,'Ivanna Sterren',84,'Analista'),(19,'Agustina Dangelo',68,'Senior');
+INSERT INTO `miembros` VALUES (8,'Bruno Massimino',22,'Analista'),(9,'Sofia Richardson',33,'Analista'),(11,'Lucila Garcia Migueles',20,'Senior');
 /*!40000 ALTER TABLE `miembros` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -50,4 +52,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-09-29 11:39:40
+-- Dump completed on 2021-10-04 17:09:50

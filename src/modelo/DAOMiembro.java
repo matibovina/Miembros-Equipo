@@ -77,7 +77,6 @@ public class DAOMiembro {
 		ps.close();
 
 		return listaMiembros;
-
 	}
 
 	public Miembro traerPorId(int id) throws SQLException {
@@ -106,7 +105,7 @@ public class DAOMiembro {
 		ArrayList<Miembro> listaCargoMiembros = null;
 
 		while (result.next()) {
-	
+
 			if (listaCargoMiembros == null) {
 				listaCargoMiembros = new ArrayList<Miembro>();
 			}

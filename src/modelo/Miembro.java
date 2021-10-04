@@ -10,7 +10,8 @@ public class Miembro {
 	private int edad;
 	private String cargo;
 
-	public Miembro() {}
+	public Miembro() {
+	}
 
 	public Miembro(int ID, String nombre, int edad, String cargo) {
 		super();
@@ -51,7 +52,8 @@ public class Miembro {
 	public void setCargo(String cargo) {
 		this.cargo = cargo;
 	}
-	//Metodos CRUD que llaman a los metodos del DAO.
+
+	// Metodos CRUD que llaman a los metodos del DAO.
 	public void insert() throws SQLException {
 		DAOMiembro.getInstance().insert(this);
 	}

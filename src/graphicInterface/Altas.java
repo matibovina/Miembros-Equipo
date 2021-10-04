@@ -400,7 +400,7 @@ public class Altas extends JFrame {
 			if (listaMiembros.isEmpty()) {
 				JOptionPane.showMessageDialog(null, "No existen miembros con ese cargo");
 				filtroCargo.setSelectedItem("Seleccionar");
-			} 
+			}
 
 		} else {
 
@@ -450,7 +450,8 @@ public class Altas extends JFrame {
 			JOptionPane.showMessageDialog(null, "DEBE COMPLETAR TODOS LOS CAMPOS");
 		} else if (!match.find()) {
 			JOptionPane.showMessageDialog(null, "El nombre no puede llevar numeros o simbolos.");
-		} else if (!matchNum.find() || Integer.parseInt(textField_edad.getText()) > 110 || Integer.parseInt(textField_edad.getText()) < 1) {
+		} else if (!matchNum.find() || Integer.parseInt(textField_edad.getText()) > 110
+				|| Integer.parseInt(textField_edad.getText()) < 1) {
 			JOptionPane.showMessageDialog(null, "La edad debe ser un numero.");
 		} else {
 			miembro.setNombre(textField_nombre.getText());
@@ -492,7 +493,8 @@ public class Altas extends JFrame {
 			JOptionPane.showMessageDialog(null, "DEBE COMPLETAR TODOS LOS CAMPOS");
 		} else if (!match.find()) {
 			JOptionPane.showMessageDialog(null, "El nombre no puede llevar numeros o simbolos.");
-		} else if (!matchNum.find() || Integer.parseInt(textField_edad.getText()) > 110 || Integer.parseInt(textField_edad.getText()) < 1) {
+		} else if (!matchNum.find() || Integer.parseInt(textField_edad.getText()) > 110
+				|| Integer.parseInt(textField_edad.getText()) < 1) {
 			JOptionPane.showMessageDialog(null, "La edad debe ser un numero entre 01 y 110.");
 		} else {
 			miembro.setNombre(textField_nombre.getText());
@@ -534,8 +536,7 @@ public class Altas extends JFrame {
 		}
 
 		if (dato != null) {
-		if (miembro.getID() > 0) {
-		
+			if (miembro.getID() > 0) {
 
 				miembro.delete(Integer.parseInt(dato));
 				pintarTabla();
@@ -543,12 +544,12 @@ public class Altas extends JFrame {
 				cantidadMiembros();
 				promedioEdad();
 
-		}
+			}
 		} else {
 			JOptionPane.showMessageDialog(null, "Seleccione un usuario valido de la lista.");
 			limpiarCampos();
 		}
-	
+
 	}
 
 	public void llenarCampos() throws NumberFormatException, SQLException { // Completa los campos con los datos del
