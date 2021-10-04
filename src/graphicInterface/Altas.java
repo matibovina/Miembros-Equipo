@@ -65,13 +65,12 @@ public class Altas extends JFrame {
 	private JLabel lblCantidad;
 	private JLabel lblPromedio;
 	private JDialog dialog;
-	JButton btnGuardar;
-	DefaultTableModel model;
-	String regex = "^[a-zA-Z ]+$";
-	Pattern patron = Pattern.compile(regex);
-	String regexNum = "\\b\\d+\\b";
-	Pattern patronNum = Pattern.compile(regexNum);
-//	private TableRowSorter<TableModel> sorter = null;
+	private JButton btnGuardar;
+	private DefaultTableModel model;
+	private String regex = "^[a-zA-Z ]+$";
+	private Pattern patron = Pattern.compile(regex);
+	private String regexNum = "\\b\\d+\\b";
+	private Pattern patronNum = Pattern.compile(regexNum);
 
 	/**
 	 * Create the frame.
@@ -301,7 +300,12 @@ public class Altas extends JFrame {
 					int response = JOptionPane.showConfirmDialog(btnBorrarFila, "Desea borrar miembro de la lista?",
 							"Confirmar", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 					if (response == JOptionPane.YES_OPTION) {
-						borrarFila();
+						try {
+							borrarFila();
+						} catch (SQLException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
 					}
 				}
 			}
@@ -314,7 +318,12 @@ public class Altas extends JFrame {
 					int response = JOptionPane.showConfirmDialog(btnBorrarFila, "Desea borrar miembro de la lista?",
 							"Confirmar", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 					if (response == JOptionPane.YES_OPTION) {
-						borrarFila();
+						try {
+							borrarFila();
+						} catch (SQLException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
 					}
 				}
 			}
@@ -441,11 +450,16 @@ public class Altas extends JFrame {
 			JOptionPane.showMessageDialog(null, "DEBE COMPLETAR TODOS LOS CAMPOS");
 		} else if (!match.find()) {
 			JOptionPane.showMessageDialog(null, "El nombre no puede llevar numeros o simbolos.");
-		} else if (!matchNum.find()) {
+		} else if (!matchNum.find() || Integer.parseInt(textField_edad.getText()) > 110 || Integer.parseInt(textField_edad.getText()) < 1) {
 			JOptionPane.showMessageDialog(null, "La edad debe ser un numero.");
 		} else {
 			miembro.setNombre(textField_nombre.getText());
-			miembro.setEdad(Integer.parseInt(textField_edad.getText()));
+			try {
+				miembro.setEdad(Integer.parseInt(textField_edad.getText()));
+			} catch (NumberFormatException e1) {
+				// TODO Auto-generated catch block
+				JOptionPane.showMessageDialog(null, "No puede llevar espacios en blanco.");
+			}
 			miembro.setCargo(cargos.getSelectedItem().toString());
 
 			try {
@@ -478,11 +492,16 @@ public class Altas extends JFrame {
 			JOptionPane.showMessageDialog(null, "DEBE COMPLETAR TODOS LOS CAMPOS");
 		} else if (!match.find()) {
 			JOptionPane.showMessageDialog(null, "El nombre no puede llevar numeros o simbolos.");
-		} else if (!matchNum.find()) {
-			JOptionPane.showMessageDialog(null, "La edad debe ser un numero.");
+		} else if (!matchNum.find() || Integer.parseInt(textField_edad.getText()) > 110 || Integer.parseInt(textField_edad.getText()) < 1) {
+			JOptionPane.showMessageDialog(null, "La edad debe ser un numero entre 01 y 110.");
 		} else {
 			miembro.setNombre(textField_nombre.getText());
-			miembro.setEdad(Integer.parseInt(textField_edad.getText()));
+			try {
+				miembro.setEdad(Integer.parseInt(textField_edad.getText()));
+			} catch (NumberFormatException e1) {
+				// TODO Auto-generated catch block
+				JOptionPane.showMessageDialog(null, "No puede llevar espacios en blanco.");
+			}
 			miembro.setCargo(cargos.getSelectedItem().toString());
 
 			try {
@@ -507,12 +526,16 @@ public class Altas extends JFrame {
 
 	}
 
-	public void borrarFila() { // Borra miembro seleccionado.
+	public void borrarFila() throws SQLException { // Borra miembro seleccionado.
 		DefaultTableModel tm = (DefaultTableModel) table.getModel();
-		String dato = String.valueOf(tm.getValueAt(table.getSelectedRow(), 0));
+		String dato = null;
+		if (table.getSelectedRow() >= 0) {
+			dato = String.valueOf(tm.getValueAt(table.getSelectedRow(), 0));
+		}
 
+		if (dato != null) {
 		if (miembro.getID() > 0) {
-			try {
+		
 
 				miembro.delete(Integer.parseInt(dato));
 				pintarTabla();
@@ -520,15 +543,12 @@ public class Altas extends JFrame {
 				cantidadMiembros();
 				promedioEdad();
 
-			} catch (NumberFormatException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (SQLException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
 		}
-
+		} else {
+			JOptionPane.showMessageDialog(null, "Seleccione un usuario valido de la lista.");
+			limpiarCampos();
+		}
+	
 	}
 
 	public void llenarCampos() throws NumberFormatException, SQLException { // Completa los campos con los datos del
